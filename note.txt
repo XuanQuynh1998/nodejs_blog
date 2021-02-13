@@ -1,0 +1,73 @@
+1. Query parameters
+dùng ?key=value cho query đầu tiên, dấu &key=value cho những query tiếp theo.
+VD: http://localhost:3000/search?q=quynh&ref=mycv&author=quynhtx
+
+Có thể lấy nội dung của query vì res trả về là 1 object
+
+app.get('/search', (req, res) => {
+    console.log(req.query.q);
+  res.render('search');
+});
+
+Thường dùng query paramaters nhất cho phương thức GET để truyền dữ liệu, các phương thức khác đều có thể nhưng ít sử dụng hơn vì đã có cách truyền dữ liệu khác
+
+2. Form default behavior
+Submit: Khi nhấn nút submit(vd  nút tìm kiếm) sẽ reload lại trang và gắn thêm query param (Nội dung trong box tìm kiếm) lên url
+
+Lầm đầu load trang sẽ dùng phương thức GET. nếu sau đó dùng phương thức POST thì sau khi f5 lại trang sẽ là phương thức POST chứ không còn phương thức GET nữa
+
+<div class="mt-4">
+    <form>
+        <div class="mb-3">
+            <label for="search-input" class="form-label">Từ khóa</label>
+            <input type="text" name="q" class="form-control" id="search-input" placeholder="Nhập từ khóa...">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </form>
+</div>
+
+Nhấn submit: hhttp://localhost:3000/search?q=noi+dung+tim+kiem
+
+
+Nếu thêm thuộc tính action sẽ thực hiện query ở trang đc action
+
+<div class="mt-4">
+    <form method="GET" action="/news">
+        <div class="mb-3">
+            <label for="search-input" class="form-label">Từ khóa</label>
+            <input type="text" name="q" class="form-control" id="search-input" placeholder="Nhập từ khóa...">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </form>
+</div>
+
+Nhấn submit: http://localhost:3000/news?q=noi+dung+tim+kiem
+
+Lấy data đã query bằng: req.query
+
+    app.get('/search', (req, res) => {
+    res.render('search');
+    console.log(req.query);
+
+3. POST method
+
+Khi nhấn submit, form nào có name đều sẽ đc gửi đi dưới dạng form data (k hiện lên trên url)
+
+Lấy data đã post bằng: req.body
+
+    app.post('/search', (req, res) => {
+    console.log(req.body);
+    res.send('');
+    });
+
+
+4. Mô hình MVC
+MVC: model view controller 
+
+Model: liên kết với resource, database
+View: phần html hiển thị ra màn hình
+Controller: trung chuyển giữa view và model, lấy dữ liệu từ model cho view xử lý, sau đó gửi lại cho client
+
+Dispatcher: đọc action từ route rồi thực thi function handler 
